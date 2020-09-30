@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.PerspectiveCamera?>
+<?import javafx.scene.SubScene?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox minHeight="150.0" minWidth="200.0" prefHeight="603.0" prefWidth="1003.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+  <children>
+      <MenuBar VBox.vgrow="NEVER">
+         <menus>
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem id="openFileMenuItem" fx:id="openFileMenuItem" mnemonicParsing="false" onAction="#openFileEvent" text="Open…" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="reinitializeMenuItem" mnemonicParsing="false" onAction="#reinitializeEvent" text="Reinitialize" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem id="quitMenuItem" fx:id="quitMenuItem" mnemonicParsing="false" onAction="#quitMenuItemEvent" text="Quit" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+               <items>
+                  <MenuItem fx:id="selectAllMenuItem" mnemonicParsing="false" onAction="#selectAllEvent" text="Select All">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                  <MenuItem fx:id="unselectAllMenuItem" mnemonicParsing="false" onAction="#selectNoneEvent" text="Unselect All">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="View">
+               <items>
+                  <SeparatorMenuItem mnemonicParsing="false" text="Color:" />
+                  <MenuItem id="mainAtoms" fx:id="mainAtomsDrawMenuItem" mnemonicParsing="false" onAction="#drawModeChangeEvent" text="Main Atoms" />
+                  <MenuItem id="spaceFilling" fx:id="spaceFillingDrawMenuItem" mnemonicParsing="false" onAction="#drawModeChangeEvent" text="Space Filling" />
+                  <MenuItem fx:id="tubeDrawMenuItem" mnemonicParsing="false" onAction="#drawModeChangeEvent" text="Tubic" />
+                  <MenuItem fx:id="secondaryStructureDrawMenuItem" mnemonicParsing="false" onAction="#drawModeChangeEvent" text="Secondary Structure" />
+                  <SeparatorMenuItem mnemonicParsing="false" text="Color:" />
+                  <MenuItem fx:id="secondaryColorMenuItem" mnemonicParsing="false" onAction="#colorModeChangeEvent" text="Secondary Structure Color" />
+                  <MenuItem fx:id="aminoAcidColorMenuItem" mnemonicParsing="false" onAction="#colorModeChangeEvent" text="Amino Acid Color" />
+                  <MenuItem id="mainAtoms" fx:id="mainAtomColorMenuItem" mnemonicParsing="false" onAction="#colorModeChangeEvent" text="Main Atoms Color" />
+                  <SeparatorMenuItem mnemonicParsing="false" text="Visualisation" />
+                  <MenuItem id="mainAtoms" fx:id="visBarChartMenuItem" mnemonicParsing="false" onAction="#createChartEvent" text="Show Aminoacid Frequency" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="About" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <SplitPane dividerPositions="0.24675324675324675" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+         <items>
+            <VBox prefHeight="572.0" prefWidth="243.0" spacing="2.0">
+               <children>
+                  <Label text="Color Mode:" />
+                  <RadioButton fx:id="atomTypeColorModeRB" mnemonicParsing="false" text="Default">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="colorModeToggleGroup" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="aminoAcidColorModeRB" mnemonicParsing="false" text="Amino Acid" toggleGroup="$colorModeToggleGroup" />
+                  <RadioButton fx:id="secStructureColorModeRB" mnemonicParsing="false" text="Secondary Structure" toggleGroup="$colorModeToggleGroup" />
+                  <Separator prefHeight="10.0" prefWidth="142.0" />
+                  <Label text="Draw Mode:" />
+                  <RadioButton fx:id="ballsAndSticksDrawModeRB" mnemonicParsing="false" text="Balls and Sticks">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="drawModeToggleGroup" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="spaceFillDrawModeRB" mnemonicParsing="false" text="Space Filling" toggleGroup="$drawModeToggleGroup" />
+                  <RadioButton fx:id="tubeDrawModeRB" mnemonicParsing="false" text="Tube" toggleGroup="$drawModeToggleGroup" />
+                  <RadioButton fx:id="cartoonDrawModeRB" mnemonicParsing="false" text="Cartoon" toggleGroup="$drawModeToggleGroup" />
+                  <Separator prefHeight="10.0" prefWidth="142.0" />
+                  <RadioButton fx:id="showSideChainsRB" mnemonicParsing="false" selected="true" text="Show Side Chains" />
+                  <Separator prefHeight="10.0" prefWidth="142.0" />
+                  <HBox prefHeight="12.0" prefWidth="235.0" spacing="4.0">
+                     <children>
+                        <Label text="PDB Entries:" />
+                        <Label fx:id="pdbStatusLabel" />
+                     </children>
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox prefHeight="27.0" prefWidth="221.0" spacing="2.0">
+                     <children>
+                        <Button fx:id="rcsbFetchButton" mnemonicParsing="false" onAction="#loadRCSBEntries" text="Fetch PDB Entries" />
+                        <Button fx:id="pdbEntryLoadButton" disable="true" mnemonicParsing="false" onAction="#loadEntryEvent" text="Load Entry" />
+                     </children>
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <ListView fx:id="pdbEntriesListView" prefHeight="250.0" />
+                  <TextField fx:id="searchPDBTextField" disable="true" />
+               </children>
+               <padding>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </padding>
+            </VBox>
+            <SplitPane dividerPositions="0.88" orientation="VERTICAL">
+               <items>
+                  <StackPane>
+                     <children>
+                        <Pane fx:id="bottomPane" pickOnBounds="false">
+                           <children>
+                              <SubScene fx:id="subScene3D" depthBuffer="true" fill="#b0fdff" height="502.0" pickOnBounds="true" width="750.0">
+                                 <root>
+                                    <Region />
+                                 </root>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                              </SubScene>
+                              <PerspectiveCamera farClip="5000.0" translateZ="-150.0" />
+                           </children>
+                        </Pane>
+                        <Pane fx:id="topPane" mouseTransparent="true" pickOnBounds="false" />
+                     </children>
+                  </StackPane>
+                  <HBox fx:id="detailHBox" prefHeight="53.0" prefWidth="750.0">
+                     <children>
+                        <VBox fx:id="detailLabelVBox" maxWidth="50.0" minHeight="30.0" minWidth="112.0" prefHeight="30.0" prefWidth="112.0">
+                           <children>
+                              <HBox fx:id="hBoxSequenceWithLabelHBox" prefHeight="2.0" prefWidth="61.0">
+                                 <children>
+                                    <Label text="Sequence:" />
+                                 </children>
+                              </HBox>
+                              <HBox fx:id="detailSecondaryStructureLabelHBox" prefHeight="8.0" prefWidth="61.0">
+                                 <children>
+                                    <Label prefHeight="16.0" prefWidth="94.0" text="Secondary:" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <ScrollPane fx:id="sequenceScrollPane" minWidth="150.0" prefHeight="54.0" HBox.hgrow="ALWAYS">
+                           <content>
+                              <VBox fx:id="detailSequenceVBox" minWidth="100.0">
+                                 <children>
+                                    <HBox fx:id="detailSequenceHBox" />
+                                    <HBox fx:id="detailSecondaryStructureHBox" />
+                                 </children>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </HBox>
+               </items>
+            </SplitPane>
+         </items>
+      </SplitPane>
+  </children>
+</VBox>

@@ -1,0 +1,35 @@
+
+.root{
+    -fx-font-size: 10pt;
+    -fx-font-family: "Tahoma";
+    -fx-base: #dcdcdc;
+    -fx-background: #e6e6f0;
+    -fx-focus-color: #9696b4;
+}
+
+.button{
+    -fx-text-fill: #02034e;
+    -fx-background-color: #d8d8d8;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 3;
+    -fx-border-width: 2;
+    -fx-border-color: #b3b3b3;
+}
+
+.button:hover{
+    -fx-border-color: #b8b8cc;
+    -fx-border-color: #b0fdff;
+    -fx-border-color: #7881ca;
+    -fx-text-fill: #38313a;
+}
+
+.button:pressed{
+    -fx-text-fill: #2a334e;
+    -fx-background-color: #9191a0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 9;
+    -fx-padding: 3;
+    -fx-border-width: 2;
+    -fx-border-color: #8284a5;
+}
