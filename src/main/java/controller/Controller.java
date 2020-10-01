@@ -32,6 +32,7 @@ import javafx.scene.transform.Transform;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import main.PDBViewer;
+import org.apache.commons.lang3.ArrayUtils;
 import proteinModel.*;
 import util.ColorUtil;
 import visualisations.AminoAcidBarChart;
@@ -656,28 +657,49 @@ public class Controller extends VBox implements Initializable {
                 public void handle(MouseEvent t) {
                     Object source = t.getSource();
                     Residue selectedResidue = null;
-                    if (!t.isShiftDown()){
+                    int clickedResidueID = -1;
+
+                    int keyModifier = mouseEventKeyModifier(t);
+
+                    if (keyModifier == 0){ // no additional key is pressed
                         residueSelection.clearSelection();
                     }
 
                     if (source instanceof ANodeView3D){
                         ANodeView3D nodeView = (ANodeView3D) source;
                         Atom clickedAtom = proteinModel.getAtom(nodeView.getNodeId());
-                        selectedResidue = proteinModel.getResidue(clickedAtom.getResidueId());
+                        clickedResidueID = clickedAtom.getResidueId();
                     } else if (source instanceof Label){
                         Residue residue = (Residue)((Label) source).getUserData();
-                        selectedResidue = proteinModel.getResidue(residue.getResidueId());
+                        clickedResidueID = residue.getResidueId();
                     } else if (source instanceof ARibbonView3D){
-                        selectedResidue = proteinModel.getResidue(((ARibbonView3D) source).getRibbonId());
+                        clickedResidueID = ((ARibbonView3D) source).getRibbonId();
                     } else if (source instanceof AEdgeView3D) {
                         AEdgeView3D edge = (AEdgeView3D) source;
                         Bond bond = proteinModel.getBond(edge.getEdgeId());
-                        selectedResidue = proteinModel.getResidue(bond.getAtomA().getResidueId());
+                        clickedResidueID = bond.getAtomA().getResidueId();
                     }
 
-                    if (selectedResidue != null){
 
-                        residueSelection.select(selectedResidue);
+                    if (clickedResidueID != -1){
+
+                        //Residue focusedResidue = residueSelection.getLastFocusedItem();
+                        selectedResidue = proteinModel.getResidue(clickedResidueID);
+
+                        switch(keyModifier) {
+                            case 1:
+                                residueSelection.extentSelectionTo(ArrayUtils.indexOf(residueSelection.getItems(), selectedResidue));
+                                break;
+                            case 4:
+                                // get last selected Residue:
+                                residueSelection.select(selectedResidue, true);
+                                break;
+                            default:
+                                residueSelection.clearSelection();
+                                residueSelection.select(selectedResidue);
+                        }
+
+                        // residueSelection.select(selectedResidue);
 
                         if (!(source instanceof Label)){
                             // Scroll Sequence Scroll Pane
@@ -688,6 +710,25 @@ public class Controller extends VBox implements Initializable {
                     }
                 }
             };
+
+    /**
+     * Encode key down values for shift, alt and control for the given MouseEvent
+     * shift = 1
+     * alt = 2
+     * control = 4
+     *
+     * @param t MouseEvent
+     * @return (int) integer encoding for shift, alt and ctrl key presses
+     */
+    private int mouseEventKeyModifier(MouseEvent t) {
+
+        int keyModifier = 0;
+        keyModifier += t.isShiftDown() ? 1 : 0;
+        keyModifier += t.isAltDown()? 2 : 0;
+        keyModifier += t.isControlDown()? 4 : 0;
+
+        return keyModifier;
+    }
 
     @FXML
     public void loadRCSBEntries(ActionEvent actionEvent) {

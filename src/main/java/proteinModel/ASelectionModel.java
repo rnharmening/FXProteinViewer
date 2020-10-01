@@ -73,6 +73,21 @@ public class ASelectionModel<T> extends MultipleSelectionModel<T> {
         for (int i : indices) {
             select(i);
         }
+        focusIndex =  indices.length > 0 ? indices[indices.length-1] : index;
+    }
+
+    public void extentSelectionTo(int index) {
+        if (focusIndex == -1) {
+            select(index);
+            return;
+        }
+        int small_ind = Math.min(focusIndex, index);
+        int large_ind = Math.max(focusIndex, index);
+        for (int i = small_ind; i < large_ind; i++) {
+            select(i);
+        }
+
+        focusIndex = index;
     }
 
     @Override
@@ -89,23 +104,35 @@ public class ASelectionModel<T> extends MultipleSelectionModel<T> {
         select(index);
     }
 
+    public void select(int index, boolean removeIfSelected) {
+        if (index >= 0 && index < items.length) {
+            if (!selectedIndices.contains(index)) {
+                selectedIndices.add(index);
+                focusIndex = index;
+            }
+            else if(removeIfSelected) {
+                selectedIndices.remove(index);
+            }
+        }
+    }
+
     @Override
     public void select(int index) {
-        if (index >= 0 && index < items.length) {
-            if (!selectedIndices.contains(index))
-                selectedIndices.add(index);
-            focusIndex = index;
+        select(index, false);
+    }
+
+    public void select(T item, boolean removeIfSelected) {
+        for (int i = 0; i < items.length; i++) {
+            if (items[i].equals(item)) {
+                select(i, removeIfSelected);
+                return;
+            }
         }
     }
 
     @Override
     public void select(T item) {
-        for (int i = 0; i < items.length; i++) {
-            if (items[i].equals(item)) {
-                select(i);
-                return;
-            }
-        }
+        select(item, false);
     }
 
     @Override
@@ -168,6 +195,17 @@ public class ASelectionModel<T> extends MultipleSelectionModel<T> {
      */
     public T[] getItems() {
         return items;
+    }
+
+    /**
+     * get the last added (i.e. focused) item
+     *
+     * @return item
+     */
+    public T getLastFocusedItem() {
+        if (this.focusIndex >= 0)
+            return this.getItems()[this.focusIndex];
+        return null;
     }
 
     /**
