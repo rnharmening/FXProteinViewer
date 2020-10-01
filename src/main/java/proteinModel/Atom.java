@@ -13,8 +13,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Atom {
 
-    public static final List<String> MAIN_CHAIN_NAMES = Arrays.asList(new String[] {"C", "CA", "N"});
-    private static final int factor = 1;
+
+    public static final List<String> MAIN_CHAIN_NAMES = Arrays.asList("C", "CA", "N");
+    private static final int FACTOR = 1;
+    public static final double MAX_DISTANCE = 3 * FACTOR;
 
     private static final AtomicInteger idCounter = new AtomicInteger();
 
@@ -44,9 +46,9 @@ public class Atom {
         this.atomName.setValue(atomName);
         this.residueName.setValue(residueName);
         this.residueId.set(residueId);
-        this.x.set(x*factor);
-        this.y.set(y*factor);
-        this.z.set(z*factor);
+        this.x.set(x* FACTOR);
+        this.y.set(y* FACTOR);
+        this.z.set(z* FACTOR);
         this.element.setValue(element);
     }
 
@@ -119,25 +121,17 @@ public class Atom {
         return z;
     }
 
-    // --------------------------------------
-    // Static Objects - maybe in separate class?
-    // --------------------------------------
+    public double distance(Atom to) {
+        if (to == null)
+            return Integer.MAX_VALUE;
 
+        return Math.sqrt(
+                            Math.pow(this.getX() - to.getX(), 2) +
+                            Math.pow(this.getY() - to.getY(), 2) +
+                            Math.pow(this.getZ() - to.getZ(), 2)
+        );
+    }
 
-    // the empirical values
-    // from https://en.wikipedia.org/wiki/Atomic_radii_of_the_elements_(data_page)
-    // where used, size in Angstrom
-
-    private static final double scaleFactor = 1/200.0;
-    public static final HashMap<String, Double> atomSizeMap = new DefaultHashMap<String, Double>((double) 0.7) {
-        {
-            put("H", 25.0 * scaleFactor);
-            put("C", 70.0 * scaleFactor);
-            put("N", 65.0 * scaleFactor);
-            put("O", 60.0 * scaleFactor);
-            put("S", 100.0 * scaleFactor);
-        }
-    };
 
     public ObservableList<Bond> getBonds() {
         return FXCollections.unmodifiableObservableList(bonds);
@@ -146,4 +140,24 @@ public class Atom {
     public Point3D getAtomPoint3D(){
         return new Point3D(x.getValue(), y.getValue(), z.getValue());
     }
+
+    // --------------------------------------
+    // Static Objects - maybe in separate class?
+    // --------------------------------------
+
+    // the empirical values
+    // from https://en.wikipedia.org/wiki/Atomic_radii_of_the_elements_(data_page)
+    // are used, size in Angstrom
+
+    private static final double scaleFactor = 1/200.0;
+
+    public static final HashMap<String, Double> atomSizeMap = new DefaultHashMap<>(0.7) {
+        {
+            put("H", 25.0 * scaleFactor);
+            put("C", 70.0 * scaleFactor);
+            put("N", 65.0 * scaleFactor);
+            put("O", 60.0 * scaleFactor);
+            put("S", 100.0 * scaleFactor);
+        }
+    };
 }

@@ -584,12 +584,8 @@ public class Controller extends VBox implements Initializable {
         this.viewTransformProperty.setValue(new Rotate());
     }
 
-    @FXML
-    void loadEntryEvent(ActionEvent event) {
-        String selectedItem = (String) pdbEntriesListView.getSelectionModel().getSelectedItem();
-        String pdbId = selectedItem.split(" - ")[0].replace(" ", "");
+    public void loadEntryFromPdbId(String pdbId) {
         try {
-
             URL url = new URL(String.format("https://files.rcsb.org/download/%s.pdb", pdbId));
             InputStream is = url.openStream();
 
@@ -602,6 +598,13 @@ public class Controller extends VBox implements Initializable {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+    }
+
+    @FXML
+    void loadEntryEvent(ActionEvent event) {
+        String selectedItem = (String) pdbEntriesListView.getSelectionModel().getSelectedItem();
+        String pdbId = selectedItem.split(" - ")[0].replace(" ", "");
+        loadEntryFromPdbId(pdbId);
     }
 
     @FXML

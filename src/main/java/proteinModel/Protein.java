@@ -50,7 +50,7 @@ public class Protein {
 
     public Bond addBond(Atom a, Atom b, BondType type){
         // Catch if atoms are the same
-        if(a == null || b == null){return null;}
+        if(a == null || b == null || a.distance(b) > Atom.MAX_DISTANCE){return null;}
 
         Bond bond = new Bond(a, b, type);
         this.bonds.add(bond);
@@ -128,7 +128,10 @@ public class Protein {
     }
 
     public void connectResidues(Residue lastRes, Residue res) {
-        this.addBond(lastRes.getAtom("C"), res.getAtom("N"), BondType.Covalent);
+        Atom atomC = lastRes.getAtom("C");
+        Atom atomN = res.getAtom("N");
+
+        this.addBond(atomC, atomN, BondType.Covalent);
     }
 
     public Residue getResidue(int residueId) {

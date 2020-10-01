@@ -25,13 +25,9 @@ public class PDBViewer extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-
-//        AnchorPane rootPane = new AnchorPane();
-//        Controller controller = new Controller();
+        Controller controller = new Controller();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layout.fxml"));
-//        fxmlLoader.setRoot(rootPane);
-//        fxmlLoader.setController(controller);
-        fxmlLoader.setControllerFactory(c -> new Controller());
+        fxmlLoader.setControllerFactory(c -> controller);
 
         Parent root = fxmlLoader.load();
         root.getStylesheets().add("general.css");
@@ -42,6 +38,9 @@ public class PDBViewer extends Application{
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
+//        controller.loadEntryFromPdbId("1bpi");
+        controller.loadEntryFromPdbId("103L");
 
     }
 
